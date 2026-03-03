@@ -1,6 +1,8 @@
 import React from "react";
 
-const Sort = () => {
+const Sort = ({ sort }) => {
+  const [active, setActive] = React.useState(0);
+
   return (
     <div className="sort">
       <div className="sort__label">
@@ -17,13 +19,21 @@ const Sort = () => {
           />
         </svg>
         <b>Сортування за:</b>
-        <span>полпулярністю</span>
+        <span>{sort[active]}</span>
       </div>
       <div className="sort__popup">
         <ul>
-          <li className="active">полпулярністю</li>
-          <li>ціною</li>
-          <li>абеткою</li>
+          {sort.map((item, index) => {
+            return (
+              <li
+                key={`${index}_${item}`}
+                onClick={() => setActive(index)}
+                className={active === index ? "active" : ""}
+              >
+                {item}
+              </li>
+            );
+          })}
         </ul>
       </div>
     </div>

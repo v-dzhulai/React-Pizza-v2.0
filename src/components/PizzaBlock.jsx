@@ -1,16 +1,12 @@
 import React from "react";
 
-const PizzaBlock = () => {
+const PizzaBlock = ({ title, price, src }) => {
   let [pizzaCount, setPizzaCount] = React.useState(0);
 
   return (
     <div className="pizza-block">
-      <img
-        className="pizza-block__image"
-        src="https://react-pizza-v2-psi.vercel.app/assets/img/products/28.png"
-        alt="Pizza"
-      />
-      <h4 className="pizza-block__title">Чізбурґер-піца</h4>
+      <img className="pizza-block__image" src={src} alt="Pizza" />
+      <h4 className="pizza-block__title">{title}</h4>
       <div className="pizza-block__selector">
         <ul>
           <li className="active">тонке</li>
@@ -23,7 +19,7 @@ const PizzaBlock = () => {
         </ul>
       </div>
       <div className="pizza-block__bottom">
-        <div className="pizza-block__price">від 395 ₴</div>
+        <div className="pizza-block__price">від {price} ₴</div>
         <button
           onClick={() => setPizzaCount(pizzaCount + 1)}
           className="button button--outline button--add"

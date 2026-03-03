@@ -3,6 +3,8 @@ import Header from "./components/Header";
 import PizzaBlock from "./components/PizzaBlock";
 import Sort from "./components/Sort";
 
+import pizzas from "./db";
+
 import "./scss/app.scss";
 
 function App() {
@@ -13,17 +15,31 @@ function App() {
       <div className="content">
         <div className="container">
           <div className="content__top">
-            <Categories />
-            <Sort />
+            <Categories
+              categories={[
+                "Всі",
+                "М'ясні",
+                "Веґетаріанські",
+                "Ґриль",
+                "Гострі",
+                "Закриті",
+              ]}
+            />
+
+            <Sort sort={["популярністю", "ціною", "абеткою"]} />
           </div>
           <h2 className="content__title">Всі піци</h2>
           <div className="content__items">
-            <PizzaBlock />
-            <PizzaBlock />
-            <PizzaBlock />
-            <PizzaBlock />
-            <PizzaBlock />
-            <PizzaBlock />
+            {pizzas.map((item, index) => {
+              return (
+                <PizzaBlock
+                  key={`${String(item.id)}_${index}`}
+                  title={item.title}
+                  price={item.price}
+                  src={item.src}
+                />
+              );
+            })}
           </div>
         </div>
       </div>
