@@ -23,14 +23,7 @@ function App() {
           <h2 className="content__title">Всі піци</h2>
           <div className="content__items">
             {pizzas.map((item, index) => {
-              return (
-                <PizzaBlock
-                  key={`${item.id}_${index}`}
-                  title={item.title}
-                  price={item.price}
-                  src={item.image}
-                />
-              );
+              return <PizzaBlock key={`${item.id}_${index}`} {...item} />;
             })}
           </div>
         </div>
