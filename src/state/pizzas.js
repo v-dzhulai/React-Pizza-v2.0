@@ -412,4 +412,9 @@ const pizzas = [
   },
 ];
 
-export default pizzas;
+const sortedPizzas = {
+  popular: pizzas.toSorted((a, b) => b.rating - a.rating),
+  priceHigh: pizzas.toSorted((a, b) => b.price - a.price),
+  priceLess: pizzas.toSorted((a, b) => a.price - b.price),
+};
+export default sortedPizzas;

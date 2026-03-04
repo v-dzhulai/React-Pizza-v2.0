@@ -1,7 +1,8 @@
 import React from "react";
 
-const Sort = ({ sort }) => {
+const Sort = ({ sort, setSortType }) => {
   const [active, setActive] = React.useState(0);
+  const [visability, setVisability] = React.useState(false);
 
   return (
     <div className="sort">
@@ -19,23 +20,29 @@ const Sort = ({ sort }) => {
           />
         </svg>
         <b>Сортування за:</b>
-        <span>{sort[active]}</span>
+        <span onClick={() => setVisability(!visability)}>{sort[active]}</span>
       </div>
-      <div className="sort__popup">
-        <ul>
-          {sort.map((item, index) => {
-            return (
-              <li
-                key={`${index}_${item}`}
-                onClick={() => setActive(index)}
-                className={active === index ? "active" : ""}
-              >
-                {item}
-              </li>
-            );
-          })}
-        </ul>
-      </div>
+      {visability && (
+        <div className="sort__popup">
+          <ul>
+            {sort.map((item, index) => {
+              return (
+                <li
+                  key={`${index}_${item}`}
+                  onClick={() => {
+                    setActive(index);
+                    setVisability(false);
+                    setSortType(index);
+                  }}
+                  className={active === index ? "active" : ""}
+                >
+                  {item}
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
     </div>
   );
 };
