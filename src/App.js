@@ -9,15 +9,20 @@ import categories from "./state/categories";
 import sort from "./state/sort";
 
 import "./scss/app.scss";
+import { Skeleton } from "./components/PizzaBlock/Skeleton";
 
 function App() {
   const [pizzas, setPizzas] = React.useState([]);
   const [sortType, setSortType] = React.useState(0);
+  const [isLoading, setIsLoading] = React.useState(true);
 
   React.useEffect(() => {
     fetch("https://6367b246edc85dbc84d9ba5d.mockapi.io/products")
       .then((res) => res.json())
-      .then((arr) => setPizzas(arr));
+      .then((arr) => {
+        setPizzas(arr);
+        setIsLoading(false);
+      });
   }, []);
 
   const sortTypes = ["popular", "priceLess", "priceHigh"];
@@ -40,9 +45,11 @@ function App() {
           </div>
           <h2 className="content__title">Всі піци</h2>
           <div className="content__items">
-            {sortedPizzas[sortTypes[sortType]].map((item, index) => {
-              return <PizzaBlock key={`${item.id}_${index}`} {...item} />;
-            })}
+            {isLoading
+              ? [...new Array(4)].map((item, index) => <Skeleton key={index} />)
+              : sortedPizzas[sortTypes[sortType]].map((item, index) => (
+                  <PizzaBlock key={`${item.id}_${index}`} {...item} />
+                ))}
           </div>
         </div>
       </div>
