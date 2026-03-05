@@ -1,18 +1,23 @@
+import { Link } from "react-router-dom";
+
 function Header() {
   return (
     <div className="header">
       <div className="container">
-        <div className="header__logo">
-          <img
-            width="38"
-            src="https://react-pizza-v2.vercel.app/static/media/pizza-logo.56ac87032d8f6fdf863326acd06c0d97.svg"
-            alt="Pizza logo"
-          />
-          <div>
-            <h1>React Pizza</h1>
-            <p>найсмачніша піца у всесвіті</p>
+        <Link to="/">
+          <div className="header__logo">
+            <img
+              width="38"
+              src="https://react-pizza-v2.vercel.app/static/media/pizza-logo.56ac87032d8f6fdf863326acd06c0d97.svg"
+              alt="Pizza logo"
+            />
+            <div>
+              <h1>React Pizza</h1>
+              <p>найсмачніша піца у всесвіті</p>
+            </div>
           </div>
-        </div>
+        </Link>
+
         <div className="header__cart">
           <a href="/cart.html" className="button button--cart">
             <span>520 ₴</span>
