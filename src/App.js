@@ -5,20 +5,28 @@ import Header from "./components/Header";
 import PizzaBlock from "./components/PizzaBlock";
 import Sort from "./components/Sort";
 
-import sortedPizzas from "./state/pizzas";
 import categories from "./state/categories";
 import sort from "./state/sort";
 
 import "./scss/app.scss";
 
 function App() {
-  const sortTypes = [
-    sortedPizzas["popular"],
-    sortedPizzas["priceLess"],
-    sortedPizzas["priceHigh"],
-  ];
-
+  const [pizzas, setPizzas] = React.useState([]);
   const [sortType, setSortType] = React.useState(0);
+
+  React.useEffect(() => {
+    fetch("https://6367b246edc85dbc84d9ba5d.mockapi.io/products")
+      .then((res) => res.json())
+      .then((arr) => setPizzas(arr));
+  }, []);
+
+  const sortTypes = ["popular", "priceLess", "priceHigh"];
+
+  const sortedPizzas = {
+    popular: pizzas.toSorted((a, b) => b.rating - a.rating),
+    priceHigh: pizzas.toSorted((a, b) => b.price - a.price),
+    priceLess: pizzas.toSorted((a, b) => a.price - b.price),
+  };
 
   return (
     <div className="wrapper">
@@ -28,11 +36,11 @@ function App() {
         <div className="container">
           <div className="content__top">
             <Categories categories={categories} />
-            <Sort sort={sort} setSortType={setSortType} />
+            <Sort sort={sort} setSortType={setSortType} types={sortTypes} />
           </div>
           <h2 className="content__title">Всі піци</h2>
           <div className="content__items">
-            {sortTypes[sortType].map((item, index) => {
+            {sortedPizzas[sortTypes[sortType]].map((item, index) => {
               return <PizzaBlock key={`${item.id}_${index}`} {...item} />;
             })}
           </div>

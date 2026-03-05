@@ -7,7 +7,11 @@ const PizzaBlock = (props) => {
 
   return (
     <div className="pizza-block">
-      <img className="pizza-block__image" src={props.image} alt="Pizza" />
+      <img
+        className="pizza-block__image"
+        src={`./img/${props.image}`}
+        alt="Pizza"
+      />
       <h4 className="pizza-block__title">{props.title}</h4>
       <p className="description">{props.description}</p>
       <div className="pizza-block__selector">
