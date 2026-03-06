@@ -4,46 +4,63 @@ import Categories from "../components/Cetegories";
 import PizzaBlock from "../components/PizzaBlock";
 import Sort from "../components/Sort";
 
-import categories from "../state/categories";
-import sort from "../state/sort";
-
 import { Skeleton } from "../components/PizzaBlock/Skeleton";
 
 const Home = () => {
   const [pizzas, setPizzas] = React.useState([]);
-  const [sortType, setSortType] = React.useState(0);
   const [isLoading, setIsLoading] = React.useState(true);
+  const [categoryId, setCategoryId] = React.useState(0);
+  const [sortType, setSortType] = React.useState({
+    name: "популярними",
+    sortProperty: "rating",
+  });
+
+  const reqCategory = categoryId === 0 ? "" : categoryId;
+  const sortBy = sortType.sortProperty.replace("-", "");
+  const order = sortType.sortProperty.includes("-") ? "asc" : "desc";
 
   React.useEffect(() => {
-    fetch("https://6367b246edc85dbc84d9ba5d.mockapi.io/products")
+    setIsLoading(true);
+
+    fetch(
+      `https://6367b246edc85dbc84d9ba5d.mockapi.io/products?category=${reqCategory}&sortBy=${sortBy}&order=${order}`,
+    )
       .then((res) => res.json())
       .then((arr) => {
         setPizzas(arr);
         setIsLoading(false);
       });
-  }, []);
 
-  const sortTypes = ["popular", "priceLess", "priceHigh"];
+    window.scrollTo(0, 0);
+  }, [categoryId, sortType]);
 
-  const sortedPizzas = {
-    popular: pizzas.toSorted((a, b) => b.rating - a.rating),
-    priceHigh: pizzas.toSorted((a, b) => b.price - a.price),
-    priceLess: pizzas.toSorted((a, b) => a.price - b.price),
-  };
+  const categories = [
+    "Всі",
+    "М'ясні",
+    "Вегетаріанські",
+    "Гриль",
+    "Гострі",
+    "Закриті",
+  ];
 
   return (
     <>
       <div className="content__top">
-        <Categories categories={categories} />
-        <Sort sort={sort} setSortType={setSortType} types={sortTypes} />
+        <Categories
+          categoryId={categoryId}
+          setCategoryId={setCategoryId}
+          categories={categories}
+        />
+
+        <Sort sortType={sortType} setSortType={setSortType} />
       </div>
 
-      <h2 className="content__title">Всі піци</h2>
+      <h2 className="content__title">{categories[categoryId]} піци</h2>
 
       <div className="content__items">
         {isLoading
           ? [...new Array(4)].map((item, index) => <Skeleton key={index} />)
-          : sortedPizzas[sortTypes[sortType]].map((item, index) => (
+          : pizzas.map((item, index) => (
               <PizzaBlock key={`${item.id}_${index}`} {...item} />
             ))}
       </div>

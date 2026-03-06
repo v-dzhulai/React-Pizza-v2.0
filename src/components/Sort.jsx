@@ -1,8 +1,13 @@
 import React from "react";
 
-const Sort = ({ sort, setSortType }) => {
-  const [active, setActive] = React.useState(0);
+const Sort = ({ sortType, setSortType }) => {
   const [visability, setVisability] = React.useState(false);
+  const sort = [
+    { name: "популярними", sortProperty: "rating" },
+    { name: "найдорожчими", sortProperty: "price" },
+    { name: "найдешевшими", sortProperty: "-price" },
+    { name: "алфавітом", sortProperty: "-title" },
+  ];
 
   return (
     <div className="sort">
@@ -20,23 +25,22 @@ const Sort = ({ sort, setSortType }) => {
           />
         </svg>
         <b>Сортування за:</b>
-        <span onClick={() => setVisability(!visability)}>{sort[active]}</span>
+        <span onClick={() => setVisability(!visability)}>{sortType.name}</span>
       </div>
       {visability && (
         <div className="sort__popup">
           <ul>
-            {sort.map((item, index) => {
+            {sort.map((obj, index) => {
               return (
                 <li
-                  key={`${index}_${item}`}
+                  key={`${index}_${obj.name}`}
                   onClick={() => {
-                    setActive(index);
+                    setSortType(obj);
                     setVisability(false);
-                    setSortType(index);
                   }}
-                  className={active === index ? "active" : ""}
+                  className={obj.name === sortType.name ? "active" : ""}
                 >
-                  {item}
+                  {obj.name}
                 </li>
               );
             })}
