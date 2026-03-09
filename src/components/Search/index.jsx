@@ -5,8 +5,11 @@ import { faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 
 import styles from "./Search.module.scss";
+import { AppContext } from "../../App";
 
-const Search = ({ searchValue, setSearchValue }) => {
+const Search = () => {
+  const { searchValue, setSearchValue } = React.useContext(AppContext);
+
   return (
     <div className={styles.root}>
       <FontAwesomeIcon icon={faMagnifyingGlass} className={styles.icon} />
