@@ -1,4 +1,6 @@
 import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setCategoryId } from "../redux/slices/filterSlice";
 
 import Categories from "../components/Cetegories";
 import PizzaBlock from "../components/PizzaBlock";
@@ -9,16 +11,21 @@ import { Skeleton } from "../components/PizzaBlock/Skeleton";
 import { AppContext } from "../App";
 
 const Home = () => {
+  const dispatch = useDispatch();
+  const categoryId = useSelector((state) => state.filter.categoryId);
+  const categories = useSelector((state) => state.filter.categories);
+
+  const sort = useSelector((state) => state.filter.sort);
+
   const { searchValue } = React.useContext(AppContext);
 
   const [pizzas, setPizzas] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
-  const [categoryId, setCategoryId] = React.useState(0);
   const [currentPage, setCurrentPage] = React.useState(1);
-  const [sortType, setSortType] = React.useState({
-    name: "популярними",
-    sortProperty: "rating",
-  });
+  // const [sortType, setSortType] = React.useState({
+  //   name: "популярними",
+  //   sortProperty: "rating",
+  // });
 
   const reqCategory = categoryId === 0 ? "" : categoryId;
   const sortBy = sortType.sortProperty.replace("-", "");
@@ -46,14 +53,9 @@ const Home = () => {
     window.scrollTo(0, 0);
   }, [categoryId, sortType, searchValue, currentPage]);
 
-  const categories = [
-    "Всі",
-    "М'ясні",
-    "Вегетаріанські",
-    "Гриль",
-    "Гострі",
-    "Закриті",
-  ];
+  function onChangeCategory(id) {
+    dispatch(setCategoryId(id));
+  }
 
   const pizzaList = pizzas.map((item, index) => (
     <PizzaBlock key={`${item.id}_${index}`} {...item} />
@@ -70,7 +72,7 @@ const Home = () => {
       <div className="content__top">
         <Categories
           categoryId={categoryId}
-          setCategoryId={setCategoryId}
+          setCategoryId={onChangeCategory}
           categories={categories}
         />
 
