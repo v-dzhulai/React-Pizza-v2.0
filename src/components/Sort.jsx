@@ -1,13 +1,7 @@
 import React from "react";
 
-const Sort = ({ sortType, setSortType }) => {
+const Sort = ({ sortType, setSortType, sort }) => {
   const [visability, setVisability] = React.useState(false);
-  const sort = [
-    { name: "популярними", sortProperty: "rating" },
-    { name: "найдорожчими", sortProperty: "price" },
-    { name: "найдешевшими", sortProperty: "-price" },
-    { name: "алфавітом", sortProperty: "-title" },
-  ];
 
   return (
     <div className="sort">

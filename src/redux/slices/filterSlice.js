@@ -3,10 +3,18 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   categoryId: 0,
   categories: ["Всі", "М'ясні", "Вегетаріанські", "Гриль", "Гострі", "Закриті"],
-  sort: {
+
+  sortType: {
     name: "популярними",
     sortProperty: "rating",
   },
+
+  sort: [
+    { name: "популярними", sortProperty: "rating" },
+    { name: "найдорожчими", sortProperty: "price" },
+    { name: "найдешевшими", sortProperty: "-price" },
+    { name: "алфавітом", sortProperty: "-title" },
+  ],
 };
 
 const filterSlice = createSlice({
@@ -16,8 +24,12 @@ const filterSlice = createSlice({
     setCategoryId(state, action) {
       state.categoryId = action.payload;
     },
+
+    setSortType(state, action) {
+      state.sortType = action.payload;
+    },
   },
 });
 
-export const { setCategoryId } = filterSlice.actions;
+export const { setCategoryId, setSortType } = filterSlice.actions;
 export default filterSlice.reducer;
