@@ -7,27 +7,21 @@ import { Routes, Route } from "react-router-dom";
 
 import "./scss/app.scss";
 
-export const AppContext = React.createContext();
-
 function App() {
-  const [searchValue, setSearchValue] = useState("");
-
   return (
-    <AppContext.Provider value={{ searchValue, setSearchValue }}>
-      <div className="wrapper">
-        <Header />
+    <div className="wrapper">
+      <Header />
 
-        <div className="content">
-          <div className="container">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/cart" element={<Cart />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </div>
+      <div className="content">
+        <div className="container">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
         </div>
       </div>
-    </AppContext.Provider>
+    </div>
   );
 }
 

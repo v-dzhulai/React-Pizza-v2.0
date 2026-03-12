@@ -15,6 +15,12 @@ const initialState = {
     { name: "найдешевшими", sortProperty: "-price" },
     { name: "алфавітом", sortProperty: "-title" },
   ],
+
+  pageCount: 2,
+  currentPage: 1,
+  pageRangeDisplayed: 16,
+
+  searchValue: "",
 };
 
 const filterSlice = createSlice({
@@ -28,8 +34,17 @@ const filterSlice = createSlice({
     setSortType(state, action) {
       state.sortType = action.payload;
     },
+
+    setCurrentPage(state, action) {
+      state.currentPage = action.payload;
+    },
+
+    setSearchValue(state, action) {
+      state.searchValue = action.payload;
+    },
   },
 });
 
-export const { setCategoryId, setSortType } = filterSlice.actions;
+export const { setCategoryId, setSortType, setCurrentPage, setSearchValue } =
+  filterSlice.actions;
 export default filterSlice.reducer;
