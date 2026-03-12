@@ -1,4 +1,6 @@
 import React from "react";
+import axios from "axios";
+
 import { useDispatch, useSelector } from "react-redux";
 import { setCategoryId, setSortType } from "../redux/slices/filterSlice";
 
@@ -13,11 +15,9 @@ import { AppContext } from "../App";
 const Home = () => {
   const dispatch = useDispatch();
 
-  const categoryId = useSelector((state) => state.filter.categoryId);
-  const categories = useSelector((state) => state.filter.categories);
-
-  const sortType = useSelector((state) => state.filter.sortType);
-  const sort = useSelector((state) => state.filter.sort);
+  const { categoryId, categories, sortType, sort } = useSelector(
+    (state) => state.filter,
+  );
 
   const { searchValue } = React.useContext(AppContext);
 
@@ -33,18 +33,18 @@ const Home = () => {
   React.useEffect(() => {
     setIsLoading(true);
 
-    fetch(
-      `https://6367b246edc85dbc84d9ba5d.mockapi.io/products?` +
-        `&p=${currentPage}` +
-        `&l=16` +
-        `&category=${reqCategory}` +
-        `&sortBy=${sortBy}` +
-        `&order=${order}` +
-        `&title=${search}`,
-    )
-      .then((res) => res.json())
-      .then((arr) => {
-        setPizzas(arr);
+    axios
+      .get(
+        `https://6367b246edc85dbc84d9ba5d.mockapi.io/products?` +
+          `&p=${currentPage}` +
+          `&l=16` +
+          `&category=${reqCategory}` +
+          `&sortBy=${sortBy}` +
+          `&order=${order}` +
+          `&title=${search}`,
+      )
+      .then((res) => {
+        setPizzas(res.data);
         setIsLoading(false);
       });
 
