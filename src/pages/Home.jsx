@@ -1,12 +1,15 @@
 import React from "react";
 import axios from "axios";
+import qs from "qs";
 
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 import {
   setCategoryId,
   setSortType,
   setCurrentPage,
+  setFilters,
 } from "../redux/slices/filterSlice";
 
 import Categories from "../components/Cetegories";
@@ -18,6 +21,9 @@ import { Skeleton } from "../components/PizzaBlock/Skeleton";
 
 const Home = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const isSearch = React.useRef(false);
+  const isMounted = React.useRef(false);
 
   const {
     categoryId,
@@ -38,7 +44,7 @@ const Home = () => {
   const order = sortType.sortProperty.includes("-") ? "asc" : "desc";
   const search = searchValue ? searchValue.toLowerCase() : "";
 
-  React.useEffect(() => {
+  function fetchPizzas() {
     setIsLoading(true);
 
     axios
@@ -55,9 +61,43 @@ const Home = () => {
         setPizzas(res.data);
         setIsLoading(false);
       });
+  }
 
+  React.useEffect(() => {
+    if (window.location.search) {
+      const params = qs.parse(window.location.search.substring(1));
+      const sortParam = sort.find(
+        (obj) => obj.sortProperty === params.sortProperty,
+      );
+
+      dispatch(setFilters({ ...params, sortParam }));
+      isSearch.current = true;
+    }
+  }, []);
+
+  React.useEffect(() => {
     window.scrollTo(0, 0);
+
+    if (!isSearch.current) {
+      fetchPizzas();
+    }
+
+    isSearch.current = false;
   }, [categoryId, sortType, searchValue, currentPage]);
+
+  React.useEffect(() => {
+    if (isMounted.current) {
+      const queryString = qs.stringify({
+        sortType,
+        categoryId,
+        currentPage,
+      });
+
+      navigate(`?${queryString}`);
+    }
+
+    isMounted.current = true;
+  }, [categoryId, sortType, currentPage]);
 
   function onChangeCategory(id) {
     dispatch(setCategoryId(id));
