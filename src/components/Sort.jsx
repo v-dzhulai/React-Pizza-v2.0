@@ -5,14 +5,29 @@ import {setSortType} from "../redux/slices/filterSlice";
 const Sort = ({sortType, sortTypeList}) => {
   const [visibility, setVisibility] = React.useState(false);
   const dispatch = useDispatch();
+  const sortRef = React.useRef();
 
   function onChangeSort(obj) {
     dispatch(setSortType(obj));
     setVisibility(false);
   }
 
+  React.useEffect(() => {
+    const handleClickOutside = (e) => {
+      if(!e.composedPath().includes(sortRef.current)) {
+        setVisibility(false);
+      }
+    };
+
+    document.body.addEventListener("click", e => handleClickOutside(e));
+
+    return () => {
+      document.body.removeEventListener("click", handleClickOutside);
+    };
+  }, [])
+
   return (
-    <div className="sort">
+    <div ref={sortRef} className="sort">
       <div className="sort__label">
         <svg
           width="10"
