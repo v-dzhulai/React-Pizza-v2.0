@@ -9,17 +9,14 @@ const initialState = {
     sortProperty: "rating",
   },
 
-  sort: [
+  sortTypeList: [
     { name: "популярними", sortProperty: "rating" },
     { name: "найдорожчими", sortProperty: "price" },
     { name: "найдешевшими", sortProperty: "-price" },
     { name: "алфавітом", sortProperty: "-title" },
   ],
 
-  pageCount: 2,
   currentPage: 1,
-  pageRangeDisplayed: 16,
-
   searchValue: "",
 };
 

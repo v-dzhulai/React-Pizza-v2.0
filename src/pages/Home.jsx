@@ -5,19 +5,13 @@ import qs from "qs";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
-import {
-  setCategoryId,
-  setSortType,
-  setCurrentPage,
-  setFilters,
-} from "../redux/slices/filterSlice";
+import {setFilters} from "../redux/slices/filterSlice";
 
-import Categories from "../components/Cetegories";
-import PizzaBlock from "../components/PizzaBlock";
+import Categories from "../components/Categories";
 import Sort from "../components/Sort";
 import Pagination from "../components/Pagination";
-
-import { Skeleton } from "../components/PizzaBlock/Skeleton";
+import PizzaList from "../components/PizzaList";
+import SkeletonList from "../components/SkeletonList";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -29,11 +23,9 @@ const Home = () => {
     categoryId,
     categories,
     sortType,
-    sort,
-    currentPage,
-    pageCount,
-    pageRangeDisplayed,
+    sortTypeList,
     searchValue,
+    currentPage,
   } = useSelector((state) => state.filter);
 
   const [pizzas, setPizzas] = React.useState([]);
@@ -66,7 +58,7 @@ const Home = () => {
   React.useEffect(() => {
     if (window.location.search) {
       const params = qs.parse(window.location.search.substring(1));
-      const sortParam = sort.find(
+      const sortParam = sortTypeList.find(
         (obj) => obj.sortProperty === params.sortProperty,
       );
 
@@ -99,54 +91,22 @@ const Home = () => {
     isMounted.current = true;
   }, [categoryId, sortType, currentPage]);
 
-  function onChangeCategory(id) {
-    dispatch(setCategoryId(id));
-  }
-
-  function onChangeSort(obj) {
-    dispatch(setSortType(obj));
-  }
-
-  function onChangeCurrentPage(id) {
-    dispatch(setCurrentPage(id));
-  }
-
-  const pizzaList = pizzas.map((item, index) => (
-    <PizzaBlock key={`${item.id}_${index}`} {...item} />
-  ));
-
-  const skeletonList = [...new Array(4)].map((item, index) => (
-    <Skeleton key={index} />
-  ));
-
-  const paragraph = `${categories[categoryId]} піци`;
-
   return (
     <>
       <div className="content__top">
-        <Categories
-          categoryId={categoryId}
-          setCategoryId={onChangeCategory}
-          categories={categories}
-        />
-
-        <Sort sortType={sortType} sort={sort} setSortType={onChangeSort} />
+        <Categories categoryId={categoryId} categories={categories} />
+        <Sort sortType={sortType} sortTypeList={sortTypeList} />
       </div>
 
       <h2 className="content__title">
-        {searchValue === "" ? paragraph : "Результати запиту..."}
+        {searchValue === "" ? `${categories[categoryId]} піци` : "Результати запиту..."}
       </h2>
 
       <div className="content__items">
-        {isLoading ? skeletonList : pizzaList}
+        {isLoading ? <SkeletonList /> : <PizzaList pizzas={pizzas} />}
       </div>
 
-      <Pagination
-        currentPage={currentPage}
-        pageCount={pageCount}
-        pageRangeDisplayed={pageRangeDisplayed}
-        onChangePage={onChangeCurrentPage}
-      />
+      <Pagination currentPage={currentPage}/>
     </>
   );
 };

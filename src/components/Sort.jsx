@@ -1,7 +1,15 @@
 import React from "react";
+import {useDispatch} from "react-redux";
+import {setSortType} from "../redux/slices/filterSlice";
 
-const Sort = ({ sortType, setSortType, sort }) => {
-  const [visability, setVisability] = React.useState(false);
+const Sort = ({sortType, sortTypeList}) => {
+  const [visibility, setVisibility] = React.useState(false);
+  const dispatch = useDispatch();
+
+  function onChangeSort(obj) {
+    dispatch(setSortType(obj));
+    setVisibility(false);
+  }
 
   return (
     <div className="sort">
@@ -19,19 +27,16 @@ const Sort = ({ sortType, setSortType, sort }) => {
           />
         </svg>
         <b>Сортування за:</b>
-        <span onClick={() => setVisability(!visability)}>{sortType.name}</span>
+        <span onClick={() => setVisibility(!visibility)}>{sortType.name}</span>
       </div>
-      {visability && (
+      {visibility && (
         <div className="sort__popup">
           <ul>
-            {sort.map((obj, index) => {
+            {sortTypeList.map((obj, index) => {
               return (
                 <li
                   key={`${index}_${obj.name}`}
-                  onClick={() => {
-                    setSortType(obj);
-                    setVisability(false);
-                  }}
+                  onClick={() => onChangeSort(obj)}
                   className={obj.name === sortType.name ? "active" : ""}
                 >
                   {obj.name}

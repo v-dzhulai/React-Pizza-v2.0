@@ -1,6 +1,10 @@
 import React from "react";
+import {useDispatch} from "react-redux";
+import {setCategoryId} from "../redux/slices/filterSlice";
 
-function Categories({ categoryId, setCategoryId, categories }) {
+function Categories({categoryId, categories}) {
+    const dispatch = useDispatch();
+
   return (
     <div className="categories">
       <ul>
@@ -9,7 +13,7 @@ function Categories({ categoryId, setCategoryId, categories }) {
             <li
               key={`${index}_${item}`}
               className={categoryId === index ? "active" : ""}
-              onClick={() => setCategoryId(index)}
+              onClick={() => dispatch(setCategoryId(index))}
             >
               {item}
             </li>
