@@ -1,8 +1,6 @@
 import React from "react";
 
-const PizzaType = ({ dough }) => {
-  let [activeType, setActiveType] = React.useState(0);
-
+const PizzaType = ({ dough, activeType, setActiveType }) => {
   return (
     <ul>
       {dough.map((item, index) => {

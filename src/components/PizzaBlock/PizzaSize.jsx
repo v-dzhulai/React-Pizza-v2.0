@@ -1,8 +1,6 @@
 import React from "react";
 
-const PizzaSize = ({ size }) => {
-  let [activeSize, setActiveSize] = React.useState(0);
-
+const PizzaSize = ({ size, activeSize, setActiveSize }) => {
   return (
     <ul>
       {size.map((item, index) => {
