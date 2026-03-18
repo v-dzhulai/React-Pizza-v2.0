@@ -1,11 +1,11 @@
 import React from "react";
-import axios from "axios";
 import qs from "qs";
 
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 import {setFilters} from "../redux/slices/filterSlice";
+import {fetchPizzas} from "../redux/slices/pizzasSlice";
 
 import Categories from "../components/Categories";
 import Sort from "../components/Sort";
@@ -28,31 +28,19 @@ const Home = () => {
     currentPage,
   } = useSelector((state) => state.filter);
 
-  const [pizzas, setPizzas] = React.useState([]);
-  const [isLoading, setIsLoading] = React.useState(true);
+  const {items, status} = useSelector((state) => state.pizzas);
 
-  const reqCategory = categoryId === 0 ? "" : categoryId;
-  const sortBy = sortType.sortProperty.replace("-", "");
-  const order = sortType.sortProperty.includes("-") ? "asc" : "desc";
-  const search = searchValue ? searchValue.toLowerCase() : "";
+  async function getPizzas() {
+    const reqCategory = categoryId === 0 ? "" : categoryId;
+    const sortBy = sortType.sortProperty.replace("-", "");
+    const order = sortType.sortProperty.includes("-") ? "asc" : "desc";
+    const search = searchValue ? searchValue.toLowerCase() : "";
 
-  function fetchPizzas() {
-    setIsLoading(true);
+    dispatch(fetchPizzas({
+      currentPage, reqCategory, sortBy, order, search,
+    }));
 
-    axios
-      .get(
-        `https://6367b246edc85dbc84d9ba5d.mockapi.io/products?` +
-          `&p=${currentPage}` +
-          `&l=16` +
-          `&category=${reqCategory}` +
-          `&sortBy=${sortBy}` +
-          `&order=${order}` +
-          `&title=${search}`,
-      )
-      .then((res) => {
-        setPizzas(res.data);
-        setIsLoading(false);
-      });
+    window.scrollTo(0, 0);
   }
 
   React.useEffect(() => {
@@ -68,10 +56,8 @@ const Home = () => {
   }, []);
 
   React.useEffect(() => {
-    window.scrollTo(0, 0);
-
     if (!isSearch.current) {
-      fetchPizzas();
+      getPizzas();
     }
 
     isSearch.current = false;
@@ -103,7 +89,7 @@ const Home = () => {
       </h2>
 
       <div className="content__items">
-        {isLoading ? <SkeletonList /> : <PizzaList pizzas={pizzas} />}
+        {status === 'loading' ? <SkeletonList /> : <PizzaList pizzas={items} />}
       </div>
 
       <Pagination currentPage={currentPage}/>
